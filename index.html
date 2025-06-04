@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PGMI Aggregate Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .formula-display {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .formula-text {
+            font-size: 18px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 16px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .input-note {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin-top: 30px;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .results {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .result-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .step-calculation {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid #28a745;
+        }
+        
+        .step {
+            margin: 8px 0;
+            color: #155724;
+            font-family: monospace;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e1e5e9;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            color: #555;
+            font-weight: 500;
+            font-size: 16px;
+        }
+        
+        .result-value {
+            color: #333;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .program-note {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #ffc107;
+            margin-top: 20px;
+            color: #856404;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PGMI Aggregate Calculator</h1>
+        
+        <div class="formula-display">
+            <div class="formula-text">
+                <strong>Formula:</strong><br>
+                (ETEA/100) × 75 + (Professional %/100) × 20
+            </div>
+        </div>
+        
+        <form id="calculatorForm">
+            <div class="input-group">
+                <label for="etea">ETEA PGMI Test Marks (out of 100):</label>
+                <input type="number" id="etea" step="0.01" min="0" max="100" required placeholder="Enter your ETEA PGMI test score">
+                <div class="input-note">Your total marks obtained in ETEA PGMI test</div>
+            </div>
+            
+            <div class="input-group">
+                <label for="professional">Overall Professional Percentage:</label>
+                <input type="number" id="professional" step="0.01" min="0" max="100" required placeholder="Enter your overall professional percentage">
+                <div class="input-note">Combined percentage from all 4-5 years of MBBS/BDS professional exams</div>
+            </div>
+            
+            <button type="submit" class="calculate-btn">Calculate PGMI Aggregate</button>
+        </form>
+        
+        <div id="results" class="results hidden">
+            <div class="result-highlight" id="finalResult">
+                Final Aggregate: 0%
+            </div>
+            
+            <div class="step-calculation">
+                <strong>📊 Calculation Breakdown:</strong>
+                <div class="step" id="step1">Step 1: ETEA Component = (0/100) × 75 = 0</div>
+                <div class="step" id="step2">Step 2: Professional Component = (0%/100) × 20 = 0</div>
+                <div class="step" id="step3">Step 3: Final Aggregate = 0 + 0 = 0%</div>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">ETEA PGMI Test Score:</span>
+                <span class="result-value" id="eteaScore">0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Professional Percentage:</span>
+                <span class="result-value" id="profPercent">0%</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">ETEA Weightage (75%):</span>
+                <span class="result-value" id="eteaWeightage">0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Professional Weightage (20%):</span>
+                <span class="result-value" id="profWeightage">0</span>
+            </div>
+            
+            <div class="program-note">
+                <strong>Note:</strong> This aggregate score is used for PGMI (Post Graduate Medical Institute) admissions. The calculation combines your ETEA test performance (75% weightage) with your overall professional examination results (20% weightage) from your MBBS/BDS degree.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get input values
+            const eteaMarks = parseFloat(document.getElementById('etea').value);
+            const professionalPercent = parseFloat(document.getElementById('professional').value);
+            
+            // Apply formula: (ETEA/100) × 75 + (Professional %/100) × 20
+            const eteaWeightage = (eteaMarks / 100) * 75;
+            const profWeightage = (professionalPercent / 100) * 20;
+            const finalAggregate = eteaWeightage + profWeightage;
+            
+            // Update step-by-step calculation
+            document.getElementById('step1').textContent = `Step 1: ETEA Component = (${eteaMarks}/100) × 75 = ${eteaWeightage.toFixed(2)}`;
+            document.getElementById('step2').textContent = `Step 2: Professional Component = (${professionalPercent}%/100) × 20 = ${profWeightage.toFixed(2)}`;
+            document.getElementById('step3').textContent = `Step 3: Final Aggregate = ${eteaWeightage.toFixed(2)} + ${profWeightage.toFixed(2)} = ${finalAggregate.toFixed(2)}%`;
+            
+            // Display results
+            document.getElementById('eteaScore').textContent = eteaMarks.toFixed(2);
+            document.getElementById('profPercent').textContent = professionalPercent.toFixed(2) + '%';
+            document.getElementById('eteaWeightage').textContent = eteaWeightage.toFixed(2);
+            document.getElementById('profWeightage').textContent = profWeightage.toFixed(2);
+            document.getElementById('finalResult').textContent = `Final Aggregate: ${finalAggregate.toFixed(2)}%`;
+            
+            // Show results
+            document.getElementById('results').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
